@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 });
 
 
-export default function LoginForm() {
+export default function Data1() {
   const [submitting, setSubmitting] = useState(false);
   const form = useForm({
     initialValues: { name: '', age: '', sex: '', height: '' },
@@ -91,7 +91,6 @@ export default function LoginForm() {
             {...form.getInputProps('height')}
           />
         </div>
-
         <div className="mt-8 flex justify-center">
           <Button type="submit" disabled={submitting} variant="gradient">
             {submitting ? 'Submitting...' : 'Submit'}

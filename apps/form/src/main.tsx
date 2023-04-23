@@ -1,13 +1,24 @@
-import { StrictMode } from "react";
-import * as ReactDOM from "react-dom/client";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './styles.css';
+import { MantineProvider, createEmotionCache } from '@mantine/core';
+import { BrowserRouter } from "react-router-dom"
+import App from './app/app';
+import { Notifications } from '@mantine/notifications';
 
-import App from "./app/app";
+const myCache = createEmotionCache({
+  key: 'mantine',
+  prepend: false
+});
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement
 );
 root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+  <MantineProvider emotionCache={myCache}>
+    <BrowserRouter>
+      <Notifications />
+      <App />
+    </BrowserRouter>
+  </MantineProvider>
 );

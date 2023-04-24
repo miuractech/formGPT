@@ -1,12 +1,12 @@
-import React from "react";
-import { Button } from "@mantine/core"
 import { Route, Routes } from "react-router-dom";
 import Data1 from "../data/data1";
-import { Data2 } from "../data/data2";
+import Data2 from "../data/data2";
 import Data3 from "../data/data3";
 import Data4 from "../data/data4";
 import Data5 from "../data/data5";
 import Data6 from "../data/data6";
+import Registration from "../data/forms/registration";
+import { Forms } from "../data/forms";
 
 function App() {
   return (
@@ -18,6 +18,10 @@ function App() {
         <Route path="/data4" element={<Data4 />} />
         <Route path="/data5" element={<Data5 />} />
         <Route path="/data6" element={<Data6 />} />
+        <Route path="/forms">
+          <Route index element={<Forms />} />
+          <Route path="registration-form" element={<Registration />} />
+        </Route>
       </Routes>
     </div>
   );

@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../app/firebaseConfig';
 
-export const Data2 = () => {
+const Data2 = () => {
 
     const form = useForm({
         initialValues: {
@@ -49,3 +49,5 @@ export const Data2 = () => {
         </Box>
     )
 }
+
+export default Data2

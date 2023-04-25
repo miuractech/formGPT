@@ -5,10 +5,12 @@ export const Forms = () => {
     const navigate = useNavigate()
 
     return (
-        <div className='max-w-5xl m-auto grid justify-center min-h-screen items-center'>
+        <div className='max-w-5xl m-auto grid justify-center min-h-screen items-center gap-3 my-10'>
             {
                 formPaths.map(item => (
-                    <Button onClick={() => navigate(item.path)}>
+                    <Button
+                        className='transform hover:scale-115 duration-200 ease-out'
+                        onClick={() => navigate(item.path)}>
                         {item.name}
                     </Button>
                 ))

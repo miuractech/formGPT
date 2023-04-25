@@ -1,3 +1,5 @@
+//create a registaion form using mantine compoents and mantaine forms with yup validation
+
 import React from 'react';
 import { TextInput, Button } from '@mantine/core';
 import * as yup from 'yup';

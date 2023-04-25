@@ -7,6 +7,14 @@ import Data5 from "../data/data5";
 import Data6 from "../data/data6";
 import Registration from "../data/forms/registration";
 import { Forms } from "../data/forms";
+import LoginForm from "../data/forms/LoginForm";
+import ContactForm from "../data/forms/ContactForm";
+import FeedbackForm from "../data/forms/FeedBackForm";
+import NewsletterForm from "../data/forms/NewsletterForm";
+import RSVPForm from "../data/forms/RsvpForm";
+import ApplicationForm from "../data/forms/ApplicetionForm";
+import SurveyForm from "../data/forms/Survey";
+import DragAndDrop from "../data/forms/DragandDropCompo";
 
 function App() {
   return (
@@ -21,6 +29,14 @@ function App() {
         <Route path="/forms">
           <Route index element={<Forms />} />
           <Route path="registration-form" element={<Registration />} />
+          <Route path="login-form" element={<LoginForm />} />
+          <Route path="contact-form" element={<ContactForm />} />
+          <Route path="feedback-form" element={<FeedbackForm />} />
+          <Route path="newsletter-subscription-form" element={<NewsletterForm />} />
+          <Route path="rsvp-form" element={<RSVPForm />} />
+          <Route path="application-form" element={<ApplicationForm />} />
+          <Route path="survey-form" element={<SurveyForm />} />
+          <Route path="drag-and-drop" element={<DragAndDrop />} /> 
         </Route>
       </Routes>
     </div>

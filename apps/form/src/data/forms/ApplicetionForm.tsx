@@ -1,3 +1,5 @@
+//create a application form using mantine compontns and mantaine forms with yup validation with feilds  email phone address education passingYear otherDetails,
+
 import React from 'react';
 import {
     TextInput,

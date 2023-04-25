@@ -1,3 +1,5 @@
+//create a survey form using mantine compontns and mantaine forms with yup validation with feilds name email name age occupation and questions
+
 import React, { FC } from 'react';
 import { TextInput, Button, Textarea } from '@mantine/core';
 import * as yup from 'yup';

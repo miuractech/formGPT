@@ -1,6 +1,6 @@
-//create a survey form using mantine compontns and mantaine forms with yup validation with feilds name email name age occupation and questions
+//create a survey form name, email, age, occupation, question1, question2 and question3 fields.
 
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { TextInput, Button, Textarea } from '@mantine/core';
 import * as yup from 'yup';
 import { addDoc, collection } from 'firebase/firestore';
@@ -21,7 +21,7 @@ interface FormValues {
 const validationSchema = yup.object({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
-    age: yup.number().required('Age is required'),
+    age: yup.number().min(13,'You should be 13 or above').required('Age is required'),
     occupation: yup.string().required('Occupation is required'),
     question1: yup.string().required('Question 1 is required'),
     question2: yup.string().required('Question 2 is required'),
@@ -29,6 +29,7 @@ const validationSchema = yup.object({
 });
 
 const SurveyForm = () => {
+    const [loading, setLoading] = useState(false)
     const form = useForm<FormValues>({
         initialValues: {
             name: '',
@@ -44,6 +45,7 @@ const SurveyForm = () => {
 
     const onSubmit = async (values: FormValues) => {
         try {
+            setLoading(true)
             await addDoc(collection(db, 'survey'), values);
             showNotification({
                 id: `survey - success - ${Math.random()}`,
@@ -51,10 +53,11 @@ const SurveyForm = () => {
                 title: 'Success',
                 message: 'Survey submitted successfully',
                 color: 'green',
-                loading: false,
             });
+            setLoading(false)
             form.reset();
         } catch (error) {
+            setLoading(false)
             console.error('Error adding document: ', error);
             showNotification({
                 id: `survey - error - ${Math.random()}`,
@@ -62,7 +65,6 @@ const SurveyForm = () => {
                 title: 'Error',
                 message: 'Error try again',
                 color: 'red',
-                loading: false,
             });
         }
     };
@@ -120,7 +122,7 @@ const SurveyForm = () => {
                     placeholder="Enter your answer"
                     {...form.getInputProps('question3')}
                 />
-                <Button type="submit">Submit</Button>
+                <Button loading={loading} type="submit">Submit</Button>
             </form>
         </div>
     );

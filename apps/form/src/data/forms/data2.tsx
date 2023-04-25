@@ -1,11 +1,13 @@
-import React from 'react'
+//create a with email field and a checkbox to accept terms and conditions. 
 import { TextInput, Checkbox, Button, Group, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '../app/firebaseConfig';
+import { db } from '../../app/firebaseConfig';
+import { useState } from 'react';
+import { showNotification } from '@mantine/notifications';
 
 const Data2 = () => {
-
+const [loading, setLoading] = useState(false)
     const form = useForm({
         initialValues: {
             email: '',
@@ -19,14 +21,31 @@ const Data2 = () => {
 
 
     return (
-        <Box maw={300} mx="auto" className='h-screen grid items-center'>
+        <div className='max-w-md mx-auto'>
             <form onSubmit={form.onSubmit(async (values) => {
                 try {
+                    setLoading(true)
                     const dataWithTimestamp = { ...values, createdAt: serverTimestamp() };
                     await addDoc(collection(db, "Data2"), dataWithTimestamp);
                     console.log("Form submission saved to Firestore!");
+                    setLoading(false)
+                    showNotification({
+                        id: `survey - success - ${Math.random()}`,
+                        autoClose: 5000,
+                        title: 'Success',
+                        message: 'Details saved successfully',
+                        color: 'green',
+                    });
                 } catch (error) {
                     console.error("Error saving form submission to Firestore: ", error);
+                    setLoading(false)
+                    showNotification({
+                        id: `survey - error - ${Math.random()}`,
+                        autoClose: 5000,
+                        title: 'Error',
+                        message: 'Error try again',
+                        color: 'red',
+                    });
                 }
             })}>
                 <TextInput
@@ -43,10 +62,10 @@ const Data2 = () => {
                 />
 
                 <Group position="right" mt="md">
-                    <Button type="submit">Submit</Button>
+                    <Button loading={loading} type="submit">Submit</Button>
                 </Group>
             </form>
-        </Box>
+        </div>
     )
 }
 

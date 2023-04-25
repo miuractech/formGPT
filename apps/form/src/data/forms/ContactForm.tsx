@@ -1,19 +1,16 @@
-//create a conatct form using mantine compontns and mantaine forms with yup validation
-
-import React from 'react';
+//create a conatct form with name, email and message fields
 import { Textarea, Button, TextInput } from '@mantine/core';
 import * as yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../app/firebaseConfig';
 import { showNotification } from '@mantine/notifications';
-
+import { useState } from 'react';
 interface ContactFormData {
     name: string;
     email: string;
     message: string;
 }
-
 const validationSchema = yup.object({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -21,6 +18,7 @@ const validationSchema = yup.object({
 });
 
 function ContactForm() {
+    const [loading, setLoading] = useState(false)
     const form = useForm<ContactFormData>({
         initialValues: {
             name: '',
@@ -32,6 +30,7 @@ function ContactForm() {
 
     const handleSubmit = async (values: ContactFormData) => {
         try {
+            setLoading(true)
             await addDoc(collection(db, 'contactsInfo'), {
                 name: values.name,
                 email: values.email,
@@ -46,9 +45,10 @@ function ContactForm() {
                 color: 'green',
                 autoClose: 5000,
             });
-
+            setLoading(false)
             form.reset();
         } catch (error) {
+            setLoading(false)
             showNotification({
                 id: `contact-error-${Math.random()}`,
                 title: 'Error',
@@ -61,7 +61,7 @@ function ContactForm() {
 
     return (
         <div className="h-screen grid items-center max-w-xl m-auto">
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            <form className='space-y-3' onSubmit={form.onSubmit(handleSubmit)}>
                 <TextInput label="Name" required {...form.getInputProps('name')} />
                 <TextInput label="Email" required {...form.getInputProps('email')} />
                 <Textarea
@@ -70,7 +70,7 @@ function ContactForm() {
                     rows={5}
                     {...form.getInputProps('message')}
                 />
-                <Button type="submit">Send</Button>
+                <Button loading={loading} type="submit">Send</Button>
             </form>
         </div>
     );

@@ -1,12 +1,7 @@
-//create a application form using mantine compontns and mantaine forms with yup validation with feilds  email phone address education passingYear otherDetails,
+//create a application form with feilds email phone address education passingYear otherDetails which is a text,
 
-import React from 'react';
-import {
-    TextInput,
-    Button,
-    Textarea,
-    Radio,
-} from '@mantine/core';
+import React, { useState } from 'react';
+import {TextInput,Button,Textarea,Radio,} from '@mantine/core';
 import * as yup from 'yup';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../app/firebaseConfig';
@@ -25,6 +20,7 @@ const validationSchema = yup.object({
 });
 
 function ApplicationForm() {
+    const [loading, setloading] = useState(false)
     const form = useForm({
         initialValues: {
             name: '',
@@ -43,6 +39,7 @@ function ApplicationForm() {
         <div className='max-w-xl m-auto'>
             <form className='space-y-3' onSubmit={form.onSubmit(async (values) => {
                 try {
+                    setloading(true)
                     await addDoc(collection(db, 'application form'), values);
                     showNotification({
                         id: `login-success-${Math.random()}`,
@@ -50,10 +47,11 @@ function ApplicationForm() {
                         title: 'Success',
                         message: 'Form submited successfully',
                         color: 'green',
-                        loading: false,
                     });
                     form.reset();
+                    setloading(false)
                 } catch (error) {
+                    setloading(false)
                     console.error('Error adding document: ', error);
                     showNotification({
                         id: `login-success-${Math.random()}`,
@@ -61,7 +59,6 @@ function ApplicationForm() {
                         title: 'Error',
                         message: 'Error try again',
                         color: 'red',
-                        loading: false,
                     });
                 }
             })}>
@@ -126,7 +123,7 @@ function ApplicationForm() {
                     placeholder="Enter any other details"
                     {...form.getInputProps('otherDetails')}
                 />
-                <Button type="submit">Submit</Button>
+                <Button loading={loading} type="submit">Submit</Button>
             </form >
         </div>
     );

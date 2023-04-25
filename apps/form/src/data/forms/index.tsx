@@ -28,6 +28,7 @@ const formNames = [
     "RSVP form",
     "Application form",
     "Survey form",
+    "drag-and-drop",
     "Order form",
     "Payment form",
     "Donation form",
@@ -119,8 +120,12 @@ const formNames = [
     "Business license application form",
     "Emergency preparedness survey form",
     "Water quality complaint form",
-    "Website feedback form"
+    "Website feedback form",
+    "data1",
+    "data2",
+    "data3",
+    "data4",
 ];
 
-const formPaths = formNames.map((name) => ({ name: name, path: `/forms/${name.toLowerCase().replace(/ /g, "-")}` }));
+const formPaths = formNames.map((name) => ({ name: name, path: `/${name.toLowerCase().replace(/ /g, "-")}` }));
 

@@ -1,10 +1,11 @@
-// create a form that gets user's name, age, sex and height. age should be between 18 and 60. and a minimum of 145cm height.
+// create a form that gets user's name, age, sex and height. age should be between 18 and 60. and a minimum of 145cm height. The fields are displayed in grid with 2 cols.
 import { useState } from 'react';
 import { useForm, yupResolver } from '@mantine/form';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '../app/firebaseConfig';
+import { db } from '../../app/firebaseConfig';
 import { TextInput, Button } from '@mantine/core';
 import * as Yup from 'yup';
+import { showNotification } from '@mantine/notifications';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -13,6 +14,8 @@ const validationSchema = Yup.object({
     .positive('Age must be a positive number')
     .min(18, 'Age must be at least 18 years old')
     .max(60, 'Age cannot be more than 60 years old')
+    .typeError('Enter a valid height')
+
     .required('Age is required'),
   sex: Yup.string()
     .matches(/^(male|female)$/i, 'Sex must be either male or female')
@@ -20,23 +23,20 @@ const validationSchema = Yup.object({
   height: Yup.number()
     .positive('Height must be a positive number')
     .min(145, 'Height must be at least 145cm')
+    .typeError('Enter a valid height')
     .required('Height is required'),
 });
 
 
 export default function Data1() {
-  const [submitting, setSubmitting] = useState(false);
   const form = useForm({
     initialValues: { name: '', age: '', sex: '', height: '' },
     validate: yupResolver(validationSchema),
   });
-
+const [loading, setLoading] = useState(false)
   async function handleSubmit() {
-    if (submitting) return;
-
-    setSubmitting(true);
-
     try {
+      setLoading(true)
       await addDoc(collection(db, 'users'), {
         name: form.values.name,
         age: form.values.age,
@@ -44,20 +44,31 @@ export default function Data1() {
         height: form.values.height,
         createdAt: serverTimestamp(),
       });
-
+            showNotification({
+                id: `id-${Math.random()}`,
+                autoClose: 5000,
+                title: 'Success',
+                message: 'Details saved successfully',
+                color: 'green',
+            });
       form.reset(); // Clear form after submission
+      setLoading(false)
     } catch (error) {
       console.error(error);
+      setLoading(false);
+      showNotification({
+        id: `survey - error - ${Math.random()}`,
+        autoClose: 5000,
+        title: 'Error',
+        message: 'Error try again',
+        color: 'red',
+    });
     }
-
-    setSubmitting(false);
   }
 
   return (
-    <div className="max-w-lg mx-auto">
-      <img src="https://picsum.photos/200" alt="Form" className="w-full h-auto mb-4 rounded-t-lg shadow-md" />
-      <form onSubmit={form.onSubmit(handleSubmit)} className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="mb-4 text-xl font-bold">Enter your details</h2>
+    <div className="max-w-md mx-auto">
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <div className="grid grid-cols-2 gap-6">
           <TextInput
             label="Name"
@@ -92,8 +103,8 @@ export default function Data1() {
           />
         </div>
         <div className="mt-8 flex justify-center">
-          <Button type="submit" disabled={submitting} variant="gradient">
-            {submitting ? 'Submitting...' : 'Submit'}
+          <Button loading={loading} type="submit" >
+            submit
           </Button>
         </div>
       </form>

@@ -2,8 +2,10 @@ import { useForm } from '@mantine/form';
 import { TextInput, Switch, Group, ActionIcon, Box, Text, Button, Code } from '@mantine/core';
 import { randomId } from '@mantine/hooks';
 import { IconTrash } from '@tabler/icons-react';
+import { useState } from 'react';
 
 export default function Data4() {
+    const [loading, setLoading] = useState(false)
     const form = useForm({
         initialValues: {
             employees: [{ name: '', active: false, key: randomId() }],
@@ -48,6 +50,7 @@ export default function Data4() {
                 {fields}
                 <Group position="center" mt="md">
                     <Button
+                    loading={loading}
                         onClick={() =>
                             form.insertListItem('employees', { name: '', active: false, key: randomId() })
                         }

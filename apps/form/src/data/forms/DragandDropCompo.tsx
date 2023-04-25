@@ -1,3 +1,5 @@
+//created a drag and drop component with react-beautiful-dnd with name and email id of users and add it to firestore on click of a button with current order
+
 import { FC, useState, useEffect } from 'react';
 import { Group, TextInput, Box, Text, Code, Button, Center } from '@mantine/core';
 import { useForm } from '@mantine/form';
